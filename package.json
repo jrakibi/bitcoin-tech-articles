@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "1.7.19",
+    "@heroicons/react": "^1.0.6",
     "@next/bundle-analyzer": "14.2.3",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.12",
@@ -23,6 +24,7 @@
     "gray-matter": "^4.0.2",
     "hast-util-from-html-isomorphic": "^2.0.0",
     "image-size": "1.0.0",
+    "lucide-react": "^0.390.0",
     "next": "14.2.3",
     "next-contentlayer2": "0.4.6",
     "next-themes": "^0.3.0",
@@ -42,9 +44,7 @@
     "remark-github-blockquote-alert": "^1.2.1",
     "remark-math": "^6.0.0",
     "tailwindcss": "^3.4.3",
-    "unist-util-visit": "^5.0.0",
-    "@heroicons/react": "^1.0.6",
-    "lucide-react": "^0.390.0"
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.0.1",
