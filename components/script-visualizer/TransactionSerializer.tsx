@@ -30,7 +30,7 @@ const svgPaths = [
 const svgSteps = [
   {
     name: 'Version',
-    description: '',
+    description: 'Transaction format version.',
     svgPath: svgPaths[0],
     status: 'complete',
     code: '[Signature]',
@@ -38,7 +38,7 @@ const svgSteps = [
   },
   {
     name: 'Input Count',
-    description: '',
+    description: 'Number of inputs.',
     svgPath: svgPaths[1],
     status: 'current',
     code: '[Public Key]',
@@ -46,15 +46,15 @@ const svgSteps = [
   },
   {
     name: 'TXID (Input 0)',
-    description: '',
+    description: 'Transaction ID ',
     svgPath: svgPaths[2],
     status: 'upcoming',
     code: '<OP_CHECKSIG>',
     category: 'PubKeyScript',
   },
   {
-    name: 'Vout (Input 0) ',
-    description: '',
+    name: 'Vout (Input 0)',
+    description: 'Index of the output',
     svgPath: svgPaths[3],
     status: 'upcoming',
     code: '',
@@ -62,7 +62,7 @@ const svgSteps = [
   },
   {
     name: 'SigScriptSize (Input 0)',
-    description: '',
+    description: 'Size of the unlocking script',
     svgPath: svgPaths[4],
     status: 'upcoming',
     code: '',
@@ -70,7 +70,7 @@ const svgSteps = [
   },
   {
     name: 'SigScript (Input 0)',
-    description: '',
+    description: 'Sript that unlocks',
     svgPath: svgPaths[5],
     status: 'upcoming',
     code: '',
@@ -78,7 +78,7 @@ const svgSteps = [
   },
   {
     name: 'Upcoming Data Size (OP_71)',
-    description: '',
+    description: 'Size of the upcoming data.',
     svgPath: svgPaths[6],
     status: 'upcoming',
     code: '',
@@ -86,7 +86,7 @@ const svgSteps = [
   },
   {
     name: 'Sequence (input 0)',
-    description: '',
+    description: 'Sequence number',
     svgPath: svgPaths[7],
     status: 'upcoming',
     code: '',
@@ -94,14 +94,14 @@ const svgSteps = [
   },
   {
     name: 'Output Count',
-    description: '',
+    description: 'Number of outputs',
     svgPath: svgPaths[8],
     status: 'upcoming',
     code: '',
     category: '',
   },
   {
-    name: 'Step ',
+    name: 'Step',
     description: '',
     svgPath: svgPaths[9],
     status: 'upcoming',
