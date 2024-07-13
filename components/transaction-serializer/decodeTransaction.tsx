@@ -1,7 +1,10 @@
-import { Transaction } from 'bitcoinjs-lib'
+import { Transaction, networks } from 'bitcoinjs-lib'
 
 class TransactionDecoder {
-  constructor(rawTx, network) {
+  rawTx: any
+  network: any
+
+  constructor(rawTx: any, network: any) {
     this.rawTx = rawTx
     this.network = network
   }

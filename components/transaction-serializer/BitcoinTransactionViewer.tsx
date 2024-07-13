@@ -2,32 +2,38 @@ import React, { useState, useEffect } from 'react'
 import TransactionDecoder from './decodeTransaction'
 
 const BitcoinTransactionViewer = ({ rawTx, network = 'bitcoin' }) => {
-  const [transactionDetails, setTransactionDetails] = useState(null)
+  const [transactionDetails, setTransactionDetails] = useState<any>(null)
   const [activeDetail, setActiveDetail] = useState('Hover over a field to see details')
 
   useEffect(() => {
     if (rawTx) {
       const decoder = new TransactionDecoder(rawTx, network)
-      const details = decoder.decode()
+      const details: any = decoder.decode()
       setTransactionDetails(details)
     }
   }, [rawTx, network])
 
   const parseScriptPubKey = (hex) => {
-    const opcodes = {
+    const opcodes: any = {
       '76': 'OP_DUP',
       a9: 'OP_HASH160',
       '88': 'OP_EQUALVERIFY',
       ac: 'OP_CHECKSIG',
     }
 
-    const parts = []
+    const parts: any = []
     let i = 0
 
     while (i < hex.length) {
       const byte = hex.substring(i, i + 2)
       if (opcodes[byte]) {
-        parts.push(`<span class="font-bold text-blue-600">${byte} (${opcodes[byte]})</span>`)
+        // parts.push(`<span class="font-bold text-blue-600">${byte} (${opcodes[byte]})</span>`)
+        parts.push(
+          <span className="font-bold text-blue-600">
+            {byte} ({opcodes[byte]})
+          </span>
+        )
+        // parts.push(`<span class="font-bold text-blue-600">${byte} (${opcodes[byte]})</span>`)
         i += 2
       } else {
         const length = parseInt(byte, 16)
