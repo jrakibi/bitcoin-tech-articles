@@ -23,10 +23,10 @@ const TransactionsDisplay = () => {
     '0100000001169e1e83e930853391bc6f35f605c6754cfead57cf8387639d3b4096c54f18f400000000484730440220576497b7e6f9b553c0aba0d8929432550e092db9c130aae37b84b545e7f4a36c022066cb982ed80608372c139d7bb9af335423d5280350fe3e06bd510e695480914f01ffffffff0100ca9a3b000000001976a914340cfcffe029e6935f4e4e5839a2ff5f29c7a57188ac00000000'
 
   return (
-    <div className="container mx-auto rounded-lg bg-white p-6 px-4 shadow-md">
-      <div className="mb-4 text-center">
-        <p className="text-lg text-gray-700">
-          Hover over and click on transaction fields to see more details.
+    <div className="container mx-auto rounded-lg">
+      <div className="mb-2 text-center">
+        <p className="text-md text-gray-700">
+          *Hover over and click on transaction fields to see more details.
         </p>
       </div>
       <div className="flex flex-col items-center justify-between md:flex-row">
@@ -39,7 +39,7 @@ const TransactionsDisplay = () => {
         />
       </div>
       {showDetails && (
-        <div className="mt-4 rounded-lg bg-gray-100 p-4">
+        <div className="mt-4 rounded-lg">
           <BitcoinTransactionViewer
             rawTx={activeTransaction === 1 ? transaction1Details : transaction2Details}
             network={'testnet'}

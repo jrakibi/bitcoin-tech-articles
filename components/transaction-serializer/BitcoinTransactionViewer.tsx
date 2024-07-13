@@ -27,13 +27,7 @@ const BitcoinTransactionViewer = ({ rawTx, network = 'bitcoin' }) => {
     while (i < hex.length) {
       const byte = hex.substring(i, i + 2)
       if (opcodes[byte]) {
-        // parts.push(`<span class="font-bold text-blue-600">${byte} (${opcodes[byte]})</span>`)
-        parts.push(
-          <span className="font-bold text-blue-600">
-            {byte} ({opcodes[byte]})
-          </span>
-        )
-        // parts.push(`<span class="font-bold text-blue-600">${byte} (${opcodes[byte]})</span>`)
+        parts.push(`<span class="font-bold text-blue-600">${byte} (${opcodes[byte]})</span>`)
         i += 2
       } else {
         const length = parseInt(byte, 16)
@@ -52,7 +46,7 @@ const BitcoinTransactionViewer = ({ rawTx, network = 'bitcoin' }) => {
   }
 
   return (
-    <div className="flex flex-col items-start justify-center px-5 py-5 md:flex-row">
+    <div className="flex flex-col items-start justify-center md:flex-row">
       <div className="mx-2 my-2 w-full rounded-lg bg-white p-6 shadow-lg md:my-0 md:w-1/2">
         <h2 className="mb-4 border-b-2 border-blue-500 pb-2 text-xl font-semibold text-gray-800">
           Transaction Details

@@ -8,7 +8,7 @@ export const BitcoinTransactionComponent = ({
   activeTransaction,
 }) => {
   return (
-    <div className="flex w-full flex-col items-center justify-between bg-white p-5 shadow-lg md:flex-row">
+    <div className="flex w-full flex-col items-center justify-between bg-white p-5 md:flex-row">
       {/* Transaction 1 */}
       <div
         role="button"
