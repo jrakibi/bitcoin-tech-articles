@@ -1,0 +1,100 @@
+---
+title: 'P2PKH [DRAFT]'
+date: 2024-07-07T15:32:14Z
+lastmod: '2024-07-07'
+tags: ['bitcoin', 'transactions', 'cryptography']
+draft: false
+summary: 'An in-depth exploration of Pay To Public Key Hash (P2PKH), the most common Bitcoin transaction type. This article covers how P2PKH works, its advantages, and its role in the Bitcoin ecosystem.'
+layout: PostSimple
+---
+
+P2PKH is a script type that locks bitcoins to the hash of a public key, which is essentially the Bitcoin address.  
+To spend these bitcoins, the recipient must provide their public key and a valid signature created with the corresponding private key.
+
+## How P2PKH Works
+
+Let's break down the P2PKH process into three main steps:
+
+1. **Locking (ScriptPubKey)**:  
+   When Alice wants to send bitcoins to Bob, she creates a transaction output with a P2PKH script that includes the hash of Bob's public key.  
+   A P2PKH locking script looks like this:
+
+```
+OP_DUP OP_HASH160 <Public Key Hash> OP_EQUALVERIFY OP_CHECKSIG
+```
+
+2. **Unlocking (ScriptSig)**:  
+   When Bob wants to spend these bitcoins, he provides his public key and a signature created with his private key.
+
+```
+<Signature> <Public Key>
+```
+
+3. **Validation**: The Bitcoin network verifies that the provided public key hashes to the specified address and that the signature is valid for that public key.
+
+## Step-by-Step Execution
+
+When a P2PKH transaction is validated, the unlocking and locking scripts are combined and executed. Here's how it works:
+
+1. Push the signature onto the stack
+2. Push the public key onto the stack
+3. Duplicate the public key (OP_DUP)
+4. Hash the duplicated public key (OP_HASH160)
+5. Push the public key hash from the locking script
+6. Compare the two hashes (OP_EQUALVERIFY)
+7. Verify the signature against the public key (OP_CHECKSIG)
+
+If all these steps succeed, the transaction is valid, and Bob can spend the bitcoins.
+
+<ScriptStackVisualizer type="p2pkh"></ScriptStackVisualizer>
+
+## Advantages of P2PKH
+
+1. **Improved Privacy**: Unlike P2PK, P2PKH doesn't expose the full public key until the coins are spent.
+2. **Shorter Addresses**: P2PKH addresses are more compact than full public keys, making them easier to handle.
+3. **Future-Proofing**: Even if advances in quantum computing threaten ECDSA, the hashing provides an extra layer of security.
+4. **Standardization**: P2PKH's widespread use makes it easy to implement across various wallet software and services.
+
+## P2PKH Example: 10,000 Pizza
+
+One of the most celebrated examples of a P2PKH transaction is the famous "Bitcoin Pizza" purchase. On May 22, 2010, Laszlo Hanyecz bought two pizzas for 10,000 BTC, worth about $41 at the time.
+
+**Transaction Id**: https://mempool.space/tx/a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d
+
+![Lock and Unlock Process](/static/images/pizza.png)
+
+## Creating a P2PKH Address:
+
+Creating a P2PKH address involves the following steps:
+
+1. **Generate a Public Key:** Start by generating a public key from a private key using elliptic curve cryptography (ECDSA).
+2. **Hash the Public Key:** Apply SHA-256 hashing to the public key, followed by RIPEMD-160 hashing to get a 160-bit hash (the public key hash).
+3. **Add Version Byte:** Prepend a version byte (0x00 for Bitcoin mainnet) to the public key hash.
+4. **Checksum:** Calculate a checksum by applying SHA-256 twice to the result from step 3, and take the first 4 bytes of the hash.
+5. **Create Address:** Append the checksum to the result from step 3 and encode it in Base58 to get the final P2PKH address.
+
+Here's how these steps are reflected in code:
+
+```js
+// Example using Node.js with bitcoinjs-lib
+const bitcoin = require('bitcoinjs-lib')
+
+// Step 1: Generate a public key
+const keyPair = bitcoin.ECPair.makeRandom()
+const { publicKey } = keyPair
+
+// Step 2 & 3: Hash the public key
+const { address } = bitcoin.payments.p2pkh({ pubkey: publicKey })
+
+console.log(`P2PKH Address: ${address}`)
+```
+
+<ExpandableSection
+  title="Further Reading"
+  preview="Interested in diving deeper into Bitcoin transaction types and scripts? Check out these resources."
+>
+  - [Bitcoin Developer Guide:
+  P2PKH](https://developer.bitcoin.org/devguide/transactions.html#pay-to-public-key-hash-p2pkh) -
+  [Bitcoin Wiki: Script](https://en.bitcoin.it/wiki/Script) - [Mastering Bitcoin by Andreas M.
+  Antonopoulos](https://github.com/bitcoinbook/bitcoinbook)
+</ExpandableSection>
