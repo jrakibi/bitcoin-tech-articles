@@ -11,6 +11,7 @@ import CodeEditor from './CodeEditor'
 import SvgDisplay from './script-visualizer/SvgDisplay'
 import Iframe from './script-visualizer/Iframe'
 import TransactionSerializer from './script-visualizer/TransactionSerializer'
+import TransactionsDisplay from './transaction-serializer/TransactionDisplay'
 
 export const components: MDXComponents = {
   Image,
@@ -25,4 +26,5 @@ export const components: MDXComponents = {
   SvgDisplay,
   Iframe,
   TransactionSerializer,
+  TransactionsDisplay,
 }

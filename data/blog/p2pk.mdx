@@ -8,28 +8,31 @@ summary: 'AThis article discusses the Pay To Public Key (P2PK) method used in Bi
 layout: PostSimple
 ---
 
-Pay to Public Key (P2PK) is one of the simplest forms of Bitcoin scripts. It allows bitcoins to be sent directly to a public key. The recipient of the bitcoins must provide a valid signature to spend them, proving ownership of the corresponding private key.
-
-In P2PK, bitcoins are sent to a public key. The recipient must provide a valid signature to spend it.
+Pay to Public Key (P2PK) is one of the simplest forms of Bitcoin scripts.  
+It allows bitcoins to be sent directly to a public key.  
+The recipient must provide a valid signature to spend them.
 
 > [!NOTE]
-> Despite being the simplest script for locking bitcoins to someone's public key, P2PK is not used as much as the similar P2PKH script.
+> Despite being the simplest script for locking bitcoins to someone's public key, P2PK is not used as much as P2PKH.
 
 ## How does it work:
 
 The ability to lock and unlock coins is the mechanism by which we transfer bitcoin.  
-*Locking* is giving some bitcoins to some entity.  
-*Unlocking* is spending some bitcoins that you have received.
+*Locking* is giving bitcoins to someone.  
+*Unlocking* is spending bitcoins that you have received.
 
 <SvgDisplay src="/script-visualizer/lock_unlock2.svg" width="70%" height="auto" />
 
+Let's take Alice and Bob to help us understand this better:
+Alice want to send some bitcoins to Bob.
+
 #### 1- Locking (ScriptPubKey):
 
-When creating a P2PK transaction, the sender specifies the recipient's public key in the ScriptPubKey.  
+When creating a P2PK transaction, Alice specifies Bob's #public key in the ScriptPubKey.  
 **ScriptPubKey**: A P2PK locking script looks like this:
 
 ```
-<recipient's public key> OP_CHECKSIG
+<Public key Bob> OP_CHECKSIG
 ```
 
 This script specifies the conditions that must be met to spend the bitcoins in the future.
@@ -37,11 +40,11 @@ and it's Placed within the output of a transaction.
 
 #### 2- Unlocking (ScriptSig)
 
-To spend Bitcoin sent to a P2PK address, the recipient must provide a valid signature corresponding to the public key.  
+To spend Bitcoin that Alice sent, Bob must provide a valid signature corresponding to the public key.  
 **ScriptSig:** P2PK Unlocking script looks like this:
 
 ```
-<signature>
+<Signature Bob>
 ```
 
 #### 3- Validation
@@ -49,11 +52,11 @@ To spend Bitcoin sent to a P2PK address, the recipient must provide a valid sign
 When a transaction is validated, the ScriptSig and ScriptPubKey are concatenated.
 
 ```
-<signature> <recipient's public key> OP_CHECKSIG
+<signature Bob> <public key Bob> OP_CHECKSIG
 ```
 
 > [!NOTE]
-> OP_CHECKSIG is an opcode that verifies an ECDSA signature. It takes two inputs from the stack, a public key (on top of the stack) and an ECDSA signature. OP_CHECKSIG will push true to the stack if the check passed, false otherwise.
+> OP_CHECKSIG is an opcode that verifies ECDSA signature. It takes two inputs from the stack (public key + signature) and push TRUE (OP_1) to the stack if the check passed, FALSE (OP_0) otherwise.
 
 ## Script Validation:
 
@@ -65,13 +68,13 @@ Let’s break down how it works using this animation:
 
 <ExpandableSection
   title="Element VS Operation (Optional)"
-  preview="Elements and Operations are fundamental to Bitcoin Script's functionality. Understanding their roles helps clarify how P2PK transactions are processed."
+  preview="In the previous example, Signature and Public Key are elements, while OP_CHECKSIG is an operation. To understand the difference between an Element and an Operation, read this."
 >
 ### Elements
 
 - **Definition:** Data pushed onto the stack.
 - **Type:** Byte strings (1 to 520 bytes).
-- **Example:** DER signatures or SEC pubkeys.
+- **Example:** Signatures or public keys.
 
 ### Operations
 
@@ -79,11 +82,11 @@ Let’s break down how it works using this animation:
 - **Type:** Consume and push elements.
 - **Example:** `OP_DUP`, `OP_HASH160`, `OP_CHECKSIG`.
 
-### Key Operations in P2PK
+### Example: OP_CHECKSIG
 
 1. **OP_CHECKSIG**
    - **Function:** Verifies the ECDSA signature.
-   - **Stack Operation:** Consumes 2 elements (pubkey and signature) and pushes 1 element (1 if valid, 0 if not).
+   - **Stack Operation:** Consumes 2 elements (pubkey and signature) and pushes 1 element (1 (TRUE) if valid, 0 (FALSE) if not).
 
 ### Summary Table
 
@@ -94,12 +97,11 @@ Let’s break down how it works using this animation:
 | **Operation** | Hashes the top stack element     | OP_HASH160    | 1 element   | 1 element       |
 | **Operation** | Verifies a signature             | OP_CHECKSIG   | 2 elements  | 1 element (0/1) |
 
-By understanding the distinction between elements and operations in Bitcoin Script, you can better grasp how P2PK transactions function and how script validation works.
-
 </ExpandableSection>
 
 ### Examples:
 
+Let's see an example
 For a hands-on example, we can look at some of the very early Bitcoin transactions, many of which were P2PK.  
 One notable transaction is from block 170 (**first Bitcoin transaction in history**), which includes a payment from Satoshi Nakamoto to Hal Finney.
 
@@ -109,7 +111,7 @@ One notable transaction is from block 170 (**first Bitcoin transaction in histor
 - **Block**: 170
 - **Date**: January 12, 2009
 
-<TransactionSerializer type="p2pk"></TransactionSerializer>
+<TransactionsDisplay></TransactionsDisplay>
 
 > **Note:** The images used here are sourced from [Bitscript](https://www.bitscript.app/home?env=MAINNET).
 
