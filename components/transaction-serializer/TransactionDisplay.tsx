@@ -24,11 +24,6 @@ const TransactionsDisplay = () => {
 
   return (
     <div className="container mx-auto rounded-lg">
-      <div className="mb-2 text-center">
-        <p className="text-md text-gray-700">
-          *Hover over and click on transaction fields to see more details.
-        </p>
-      </div>
       <div className="flex flex-col items-center justify-between md:flex-row">
         <BitcoinTransactionComponent
           transaction1Script={['<Public Key>', 'OP_CHECKSIG']}

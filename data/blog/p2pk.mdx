@@ -99,31 +99,30 @@ Let’s break down how it works using this animation:
 
 </ExpandableSection>
 
-### Examples:
+### First Bitcoin transaction in history
 
-Let's see an example
-For a hands-on example, we can look at some of the very early Bitcoin transactions, many of which were P2PK.  
-One notable transaction is from block 170 (**first Bitcoin transaction in history**), which includes a payment from Satoshi Nakamoto to Hal Finney.
-
-###### Example Details:
+One notable P2PK transaction is from block 170, which includes a payment from Satoshi Nakamoto to Hal Finney.
 
 - **Transaction ID**: [f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16)
-- **Block**: 170
-- **Date**: January 12, 2009
 
 <TransactionsDisplay></TransactionsDisplay>
 
+> **Note:** You can Hover over and click on transaction fields to see more details.
+
 ## P2PK Limitations and why we need P2PKH ?
 
-### Problems with P2PK
+#### Problems with P2PK
 
-P2PK (Pay to Public Key) presents several issues. Public keys are long (33 or 65 bytes), and when encoded in hexadecimal, their length doubles, making them hard for humans to read, transcribe, and communicate. This also results in a larger UTXO set because these keys must be stored and indexed, requiring more resources for full nodes. Additionally, public keys are visible on the bitcoin network, posing a potential security risk if ECDSA is ever broken.
+- ❌ Public keys are long (33 or 65 bytes).
+- ❌ This results in a larger UTXO set because these keys must be stored and indexed, requiring more resources for full nodes.
+- ❌ Pblic keys are visible on the bitcoin network, posing a risk if ECDSA is ever broken.
 
-### Solutions with P2PKH
+#### Solutions with P2PKH
 
-P2PKH (Pay to Public Key Hash) addresses these challenges by using a hashed version of the public key. This creates shorter, more manageable addresses by using SHA-256 and RIPEMD-160 to produce a 20-byte hash. It also enhances security by hiding the public key, providing additional protection against future attacks on ECDSA.
+P2PKH (Pay to Public Key Hash) addresses these challenges by using a hashed version of the public key. This creates:
 
-### Summary Table: P2PK vs. P2PKH
+- ✅ Shorter, more manageable addresses by using SHA-256 and RIPEMD-160 to produce a 20-byte hash.
+- ✅ Improve security by hiding the public key, providing additional protection against future attacks on ECDSA.
 
 | Aspect             | P2PK                                   | P2PKH                                        |
 | ------------------ | -------------------------------------- | -------------------------------------------- |
@@ -132,16 +131,12 @@ P2PKH (Pay to Public Key Hash) addresses these challenges by using a hashed vers
 | **Privacy**        | Public keys are visible                | Public keys are hashed, enhancing privacy    |
 | **Security**       | Vulnerable if ECDSA is broken          | Additional layer of security through hashing |
 
-### Example Address Comparison
+#### Example Address Comparison
 
 | Format    | Example Length                    |
 | --------- | --------------------------------- |
 | **P2PK**  | 130 characters (uncompressed SEC) |
 | **P2PKH** | 40 characters (hash160)           |
-
-By addressing the challenges of P2PK with P2PKH, Bitcoin transactions become more efficient, secure, and user-friendly.
-
-> [!IMPORTANT] > **Next Topic:** In the next topic, we'll dive deeper into the specifics of P2PKH.
 
 ### Exercise:
 
@@ -155,3 +150,5 @@ Create a ScriptSig that can unlock this ScriptPubKey. Make this ....
   src="https://codesandbox.io/p/devbox/p2pkh-lvfxrl?embed=1&file=%2Fmain.py"
   title="P2PKH Code Example"
 />
+--- > [!IMPORTANT] > **Next Topic:** In the next topic, we'll dive deeper into the specifics of
+P2PKH.
