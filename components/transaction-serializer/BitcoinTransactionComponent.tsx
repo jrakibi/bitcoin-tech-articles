@@ -22,6 +22,10 @@ export const BitcoinTransactionComponent = ({
         }}
       >
         <div className="w-full rounded-lg border-2 border-gray-200 shadow-sm">
+          <div className="text-md item-center pt-3 text-center font-medium text-gray-800">
+            Transaction 1: Satoshi sends to Hal Finney
+          </div>
+
           <div className="grid grid-cols-2 gap-4 p-5">
             <div className="rounded-lg border border-gray-100 bg-white p-3 hover:bg-gray-50">
               <div className="font-semibold text-gray-800">Input</div>
@@ -70,6 +74,10 @@ export const BitcoinTransactionComponent = ({
         }}
       >
         <div className="w-full rounded-lg border-2 border-gray-200 shadow-sm">
+          <div className="text-md item-center pt-3 text-center font-medium text-gray-800">
+            Transaction 2: Hal spends the received Bitcoin
+          </div>
+
           <div className="grid grid-cols-2 gap-4 p-5">
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 hover:bg-gray-100">
               <div className="font-semibold text-gray-800">Input</div>
