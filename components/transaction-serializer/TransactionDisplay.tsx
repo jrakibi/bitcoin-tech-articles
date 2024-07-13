@@ -32,7 +32,7 @@ const TransactionsDisplay = () => {
       <div className="flex flex-col items-center justify-between md:flex-row">
         <BitcoinTransactionComponent
           transaction1Script={['<Public Key>', 'OP_CHECKSIG']}
-          transaction2Script={['<Signature>', 'Other Details']}
+          transaction2Script={['<Signature>']}
           onTransaction1Click={() => handleTransactionClick(1)}
           onTransaction2Click={() => handleTransactionClick(2)}
           activeTransaction={activeTransaction}
