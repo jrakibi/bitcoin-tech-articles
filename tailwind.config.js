@@ -23,6 +23,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        sriracha: ['var(--font-sriracha)', ...fontFamily.sans],
       },
       colors: {
         primary: colors.pink,
@@ -46,7 +47,7 @@ module.exports = {
               fontWeight: '600',
             },
             code: {
-              color: theme('colors.indigo.500'),
+              color: theme('colors.orange.500'),
             },
           },
         },

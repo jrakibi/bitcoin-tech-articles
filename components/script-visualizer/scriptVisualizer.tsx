@@ -92,7 +92,7 @@ export default function ScriptStackVisualizer({ type, children }: ScriptStackVis
   }
   const getStatusIcon = (index) => {
     if (index < svgIndex) {
-      return <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />
+      return <CheckIcon className="h-5 w-5 text-green-500" aria-hidden="true" />
     } else if (index === svgIndex) {
       return <span className="h-2.5 w-2.5 rounded-full bg-orange-600" />
     } else {
@@ -101,10 +101,10 @@ export default function ScriptStackVisualizer({ type, children }: ScriptStackVis
   }
 
   return (
-    <div className="flex flex-col items-center justify-center  p-4">
+    <div className="flex flex-col items-center justify-center p-4">
       {/* <NavBar></NavBar> */}
 
-      <div className="mx-auto flex w-full max-w-6xl space-x-2 rounded-lg bg-gray-800 p-2">
+      <div className="mx-auto flex w-full max-w-6xl space-x-2 rounded-lg bg-gray-100 p-2 shadow-md">
         <nav aria-label="Progress" className="w-2/5">
           {/* Control Buttons */}
           <div className="mb-2 flex justify-center space-x-1">
@@ -172,7 +172,7 @@ export default function ScriptStackVisualizer({ type, children }: ScriptStackVis
           ref={svgRef}
           type="image/svg+xml"
           data={svgSteps[svgIndex].svgPath}
-          className="h-auto w-3/5 rounded-lg bg-gray-200 shadow-xl"
+          className="h-auto w-3/5 rounded-lg bg-white shadow-md"
           aria-labelledby="svgAnimation"
           role="img"
         >

@@ -4,65 +4,112 @@ date: 2024-07-05T15:32:14Z
 lastmod: '2024-07-06'
 tags: ['bitcoin', 'privacy']
 draft: false
-summary: 'AThis article discusses the Pay To Public Key (P2PK) method used in Bitcoin transactions, highlighting its role in enhancing user privacy and security. Includes practical code examples and deep insights into its operation within the Bitcoin protocol.'
+summary: 'This article discusses the Pay To Public Key (P2PK) method used in Bitcoin transactions, highlighting its role in enhancing user privacy and security. Includes practical code examples and deep insights into its operation within the Bitcoin protocol.'
 layout: PostSimple
 ---
 
-Pay to Public Key (P2PK) is one of the simplest forms of Bitcoin scripts.  
-It allows bitcoins to be sent directly to a public key.  
-The recipient must provide a valid signature to spend them.
+P2PK was one of the earliest transaction types used in Bitcoin. Many of the early Bitcoin transactions attributed to Satoshi used P2PK.
+
+This transaction type is one of the simplest Bitcoin script types to understand, making it an ideal starting point for laying the foundation for more complex ones.
+
+**TLDR:** P2PK allows bitcoins to be sent directly to a public key. To spend the bitcoins, the recipient must provide a valid signature.
 
 > [!NOTE]
-> Despite being the simplest script for locking bitcoins to someone's public key, P2PK is not used as much as P2PKH.
+> Despite being the simplest script, P2PK is not used as much as P2PKH.
 
 ## How does it work:
 
-The ability to lock and unlock coins is the mechanism by which we transfer bitcoin.  
+To help us understand how P2PK works, we will explain it using the example of the **first transaction in Bitcoin history**.  
+It’s a P2PK transaction from [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16) which includes a payment of 10 BTC from Satoshi Nakamoto to Hal Finney.
+
+<TransactionsDisplay
+  rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
+  txTitle="Satoshi Sends 10 BTC to Hal"
+  highlightIndex={{ output: 1 }}
+/>
+
+The ability to **lock** and **unlock** coins is the mechanism by which we transfer bitcoin.  
 *Locking* is giving bitcoins to someone.  
 *Unlocking* is spending bitcoins that you have received.
 
 <SvgDisplay src="/script-visualizer/lock_unlock2.svg" width="70%" height="auto" />
 
-Let's take Alice and Bob to help us understand this better:
-Alice want to send some bitcoins to Bob.
-
 #### 1- Locking (ScriptPubKey):
 
-When creating a P2PK transaction, Alice specifies Bob's #public key in the ScriptPubKey.  
+When creating a P2PK transaction, Satoshi specifies **Hal's public key in the ScriptPubKey**.  
+This script specifies the conditions that must be met to spend the bitcoins in the future, and it's Placed within the output of a transaction.
+
 **ScriptPubKey**: A P2PK locking script looks like this:
 
 ```
-<Public key Bob> OP_CHECKSIG
+<Public key Hal> OP_CHECKSIG
 ```
 
-This script specifies the conditions that must be met to spend the bitcoins in the future.
-and it's Placed within the output of a transaction.
+To see this in action click on the **Output 2** of this Transaction too see the HEX and ASM representation of scriptPubKey
+
+<TransactionsDisplay
+  rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
+  txId="f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16"
+  txTitle="Satoshi Sends 10 BTC to Hal"
+  highlightIndex={{ output: 1 }}
+/>
+
+- **OP_PUSHBYTES_65**: Indicates the length of the uncompressed public key (65 bytes)
+- **0411db ... b412a3**: Represents the public key of Hal Finney
+- **OP_CHECKSIG**: This opcode, shown as "0xac" at the end of the HEX section above, verifies an ECDSA signature. It returns TRUE if the signature is valid, otherwise FALSE.
+
+<ExpandableSection
+  title="Why Satoshi used Uncompressed pub key (65 bytes) ?"
+  preview="Satoshi didn't know about compressed public keys ..."
+>
+Some have speculated that Satoshi was unaware of public key compression. It wasn't until Pieter Wuille discovered that the compressed SEC format existed in OpenSSL that people start using it.   
+The advantage of using Compressed pub key is:   
+their public keys are smaller => smaller transaction on the network => save block space
+
+</ExpandableSection>
 
 #### 2- Unlocking (ScriptSig)
 
-To spend Bitcoin that Alice sent, Bob must provide a valid signature corresponding to the public key.  
+To spend Bitcoin that Satoshi sent, Hal must provide a valid signature corresponding to the public key.
+
 **ScriptSig:** P2PK Unlocking script looks like this:
 
 ```
-<Signature Bob>
+<Signature Hal>
 ```
+
+For our example this is it:: The scriptSig is the signature followed by SigHash byte as shown below
+Click on the transaction below to see it in action:
+
+<TransactionsDisplay
+  rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
+  txId="f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16"
+  txTitle="Satoshi Sends 10 BTC to Hal"
+  highlightIndex={{ input: 0 }}
+
+/>
+
+- **OP_PUSHBYTES_71**: Indicates the length of the signature (71 bytes).
+- **30442 ... 1d9**: Hal's digital signature.
+- **01**: SigHash type (SIGHASH_ALL)
 
 #### 3- Validation
 
 When a transaction is validated, the ScriptSig and ScriptPubKey are concatenated.
 
 ```
-<signature Bob> <public key Bob> OP_CHECKSIG
+<signature Hal> <public key Hal> OP_CHECKSIG
 ```
 
+The combined script will validate if the signature is valid, but fail if the signature is invalid.
+The ScriptSig will only unlock the ScriptPubKey if the signature is valid for that public key.
+
+In other words, only someone with knowledge of the private key can produce a valid ScriptSig.
+
 > [!NOTE]
-> OP_CHECKSIG is an opcode that verifies ECDSA signature. It takes two inputs from the stack (public key + signature) and push TRUE (OP_1) to the stack if the check passed, FALSE (OP_0) otherwise.
+> For the script to be valid, the top element of the stack must be **nonzero** after evaluation
 
-## Script Validation:
-
-The combined script is executed using stack operations.
-
-Let’s break down how it works using this animation:
+You can play with this tool below to see step by step how we evaluate P2PK the stack
 
 <ScriptStackVisualizer type="p2pk"></ScriptStackVisualizer>
 
@@ -70,17 +117,15 @@ Let’s break down how it works using this animation:
   title="Element VS Operation (Optional)"
   preview="In the previous example, Signature and Public Key are elements, while OP_CHECKSIG is an operation. To understand the difference between an Element and an Operation, read this."
 >
-### Elements
+**Elements:**  Data pushed onto the stack.
 
-- **Definition:** Data pushed onto the stack.
 - **Type:** Byte strings (1 to 520 bytes).
-- **Example:** Signatures or public keys.
+- **Example:** `Signatures` or `public keys`
 
-### Operations
+**Operations:** Commands that manipulate stack elements.
 
-- **Definition:** Commands that manipulate stack elements.
 - **Type:** Consume and push elements.
-- **Example:** `OP_DUP`, `OP_HASH160`, `OP_CHECKSIG`.
+- **Example:** `OP_DUP`, `OP_HASH160`, `OP_CHECKSIG`
 
 ### Example: OP_CHECKSIG
 
@@ -99,44 +144,20 @@ Let’s break down how it works using this animation:
 
 </ExpandableSection>
 
-### First Bitcoin transaction in history
+### Problems with P2PK
 
-One notable P2PK transaction is from block 170, which includes a payment from Satoshi Nakamoto to Hal Finney.
+- **❌ Public keys are long:** Your username on a website is usually less than 20 characters, but a compressed public key is 33 bytes, and an uncompressed one is 65 bytes. When converted to Hex, the length doubles (compressed: 33 bytes × 2 = 66 characters; uncompressed: 65 bytes × 2 = 130 characters). This is because each byte is represented by two hexadecimal characters (8 bits = 2 × 4 bits)
+- **❌ Larger public keys = larger UTXO:** These keys must be stored and indexed, requiring more resources for full nodes.
+- **❌ If ECDSA is broken**, these outputs could be stolen because everyone can see the public key in the scriptPubKey field.
 
-- **Transaction ID**: [f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16)
+### Solving the Problems with p2pkh
 
-<TransactionsDisplay></TransactionsDisplay>
+P2PKH fixes this. Read the next topic to learn how
 
-> **Note:** You can Hover over and click on transaction fields to see more details.
+> [!IMPORTANT] > **Next Topic:** In the next topic, we'll dive deeper into the specifics of
+> P2PKH.
 
-## P2PK Limitations and why we need P2PKH ?
-
-#### Problems with P2PK
-
-- ❌ Public keys are long (33 or 65 bytes).
-- ❌ This results in a larger UTXO set because these keys must be stored and indexed, requiring more resources for full nodes.
-- ❌ Pblic keys are visible on the bitcoin network, posing a risk if ECDSA is ever broken.
-
-#### Solutions with P2PKH
-
-P2PKH (Pay to Public Key Hash) addresses these challenges by using a hashed version of the public key. This creates:
-
-- ✅ Shorter, more manageable addresses by using SHA-256 and RIPEMD-160 to produce a 20-byte hash.
-- ✅ Improve security by hiding the public key, providing additional protection against future attacks on ECDSA.
-
-| Aspect             | P2PK                                   | P2PKH                                        |
-| ------------------ | -------------------------------------- | -------------------------------------------- |
-| **Address Length** | 33 or 65 bytes (66 or 130 characters)  | 20 bytes (40 characters)                     |
-| **UTXO Set Size**  | Larger due to storing full public keys | Smaller due to storing hashes                |
-| **Privacy**        | Public keys are visible                | Public keys are hashed, enhancing privacy    |
-| **Security**       | Vulnerable if ECDSA is broken          | Additional layer of security through hashing |
-
-#### Example Address Comparison
-
-| Format    | Example Length                    |
-| --------- | --------------------------------- |
-| **P2PK**  | 130 characters (uncompressed SEC) |
-| **P2PKH** | 40 characters (hash160)           |
+---
 
 ### Exercise:
 
@@ -150,7 +171,3 @@ Create a ScriptSig that can unlock this ScriptPubKey. Make this ....
   src="https://codesandbox.io/p/devbox/p2pkh-lvfxrl?embed=1&file=%2Fmain.py"
   title="P2PKH Code Example"
 />
----{' '}
-
-> [!IMPORTANT] > **Next Topic:** In the next topic, we'll dive deeper into the specifics of
-> P2PKH.

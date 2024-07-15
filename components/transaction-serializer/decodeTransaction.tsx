@@ -1,24 +1,28 @@
-import { Transaction, networks } from 'bitcoinjs-lib'
+import { Transaction, payments, script as btcScript } from 'bitcoinjs-lib'
 
 class TransactionDecoder {
-  rawTx: any
-  network: any
+  rawTx: string
+  network: string
 
-  constructor(rawTx: any, network: any) {
+  constructor(rawTx: string, network: string) {
     this.rawTx = rawTx
     this.network = network
   }
 
+  // Assuming TransactionDecoder is set up correctly to include scriptSig for inputs
   decode() {
     const tx = Transaction.fromHex(this.rawTx)
     const decodedTransaction = {
       txid: tx.getId(),
       version: tx.version,
       locktime: tx.locktime,
-      inputs: tx.ins.map((input, index) => ({
+      inputs: tx.ins.map((input) => ({
         txid: Buffer.from(input.hash).reverse().toString('hex'),
         n: input.index,
-        script: input.script.length > 0 ? input.script.toString('hex') : '',
+        scriptSig: {
+          asm: this.toCustomASM(input.script),
+          hex: input.script.toString('hex'),
+        },
         sequence: input.sequence,
       })),
       outputs: tx.outs.map((output, index) => ({
@@ -26,18 +30,50 @@ class TransactionDecoder {
         value: (output.value * 1e-8).toFixed(8),
         n: index,
         scriptPubKey: {
-          asm: output.script.toString('hex'), // Simplified, ideally you should convert to ASM format if needed
+          asm: this.toCustomASM(output.script),
           hex: output.script.toString('hex'),
-          type: '', // You can add more logic to determine type
-          addresses: [], // Decoding addresses would need additional logic
+          type: this.classifyOutputScript(output.script),
         },
       })),
     }
 
-    // Here you would expand to parse types and addresses correctly
-    // This would depend on the script type and require additional handling
-
     return decodedTransaction
+  }
+
+  toCustomASM(scriptBuffer) {
+    const script = btcScript.decompile(scriptBuffer)
+    if (!script) return ''
+
+    return script
+      .map((element) => {
+        if (typeof element === 'number') {
+          return btcScript.toASM([element])
+        } else if (element.length) {
+          const opcode = 'OP_PUSHBYTES_' + element.length
+          const hex = element.toString('hex')
+          return `${opcode} ${hex}`
+        }
+        return ''
+      })
+      .join(' ')
+  }
+
+  classifyOutputScript(script) {
+    const isOutput = (paymentFn) => {
+      try {
+        return paymentFn({ output: script }) ? paymentFn.name : undefined
+      } catch (e) {
+        return undefined
+      }
+    }
+
+    if (isOutput(payments.p2pk)) return 'P2PK'
+    else if (isOutput(payments.p2pkh)) return 'P2PKH'
+    else if (isOutput(payments.p2ms)) return 'P2MS (multisig)'
+    else if (isOutput(payments.p2wpkh)) return 'P2WPKH'
+    else if (isOutput(payments.p2sh)) return 'P2SH'
+
+    return 'nonstandard'
   }
 }
 
