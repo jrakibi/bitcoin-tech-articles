@@ -10,34 +10,32 @@ layout: PostSimple
 
 P2PK was one of the earliest transaction types used in Bitcoin. Many of the early Bitcoin transactions attributed to Satoshi used P2PK.
 
-This transaction type is one of the simplest Bitcoin script types to understand, making it an ideal starting point for laying the foundation for more complex ones.
+This simple script type serves as an ideal foundation for understanding more complex scripts
 
-**TLDR:** P2PK allows bitcoins to be sent directly to a public key. To spend the bitcoins, the recipient must provide a valid signature.
+**TLDR:** P2PK allows bitcoins to be sent directly to a _public key_. To spend the bitcoins, the recipient must provide a _valid signature_.
 
 > [!NOTE]
 > Despite being the simplest script, P2PK is not used as much as P2PKH.
 
-## How does it work:
-
-To help us understand how P2PK works, we will explain it using the example of the **first transaction in Bitcoin history**.  
-It’s a P2PK transaction from [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16) which includes a payment of 10 BTC from Satoshi Nakamoto to Hal Finney.
+To better understand how P2PK works, let's explore the **first transaction in Bitcoin history** from [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where _Satoshi Nakamoto_ sent 10 BTC to _Hal Finney_.
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
-  txTitle="Satoshi Sends 10 BTC to Hal"
-  highlightIndex={{ output: 1 }}
+  txTitle="Satoshi Sends 10 BTC to Hal Finney"
+  highlightIndex={{ output: 0 }}
 />
+> Note: You can Click on Inputs and Outputs above to view more details
 
-The ability to **lock** and **unlock** coins is the mechanism by which we transfer bitcoin.  
-*Locking* is giving bitcoins to someone.  
-*Unlocking* is spending bitcoins that you have received.
+The ability to lock and unlock coins is the mechanism by which we transfer bitcoin.  
+**Locking** is giving bitcoins to someone.  
+**Unlocking** is spending bitcoins that you have received.
 
 <SvgDisplay src="/script-visualizer/lock_unlock2.svg" width="70%" height="auto" />
 
 #### 1- Locking (ScriptPubKey):
 
 When creating a P2PK transaction, Satoshi specifies **Hal's public key in the ScriptPubKey**.  
-This script specifies the conditions that must be met to spend the bitcoins in the future, and it's Placed within the output of a transaction.
+This script specifies the conditions that must be met to spend the bitcoins in the future, and it's placed within the output of a transaction.
 
 **ScriptPubKey**: A P2PK locking script looks like this:
 
@@ -45,7 +43,7 @@ This script specifies the conditions that must be met to spend the bitcoins in t
 <Public key Hal> OP_CHECKSIG
 ```
 
-To see this in action click on the **Output 2** of this Transaction too see the HEX and ASM representation of scriptPubKey
+To see this in action click on the **Output 1** of this Transaction too see the HEX and ASM representation of scriptPubKey
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
@@ -55,8 +53,8 @@ To see this in action click on the **Output 2** of this Transaction too see the 
 />
 
 - **OP_PUSHBYTES_65**: Indicates the length of the uncompressed public key (65 bytes)
-- **0411db ... b412a3**: Represents the public key of Hal Finney
-- **OP_CHECKSIG**: This opcode, shown as "0xac" at the end of the HEX section above, verifies an ECDSA signature. It returns TRUE if the signature is valid, otherwise FALSE.
+- **0411db ... b412a3**: Represents Hal Finney's public key
+- **OP_CHECKSIG**: This opcode, shown as "0xac" at the end of the HEX section above, verifies an ECDSA signature. It returns TRUE (OP_1) if the signature is valid, otherwise FALSE (OP_0).
 
 <ExpandableSection
   title="Why Satoshi used Uncompressed pub key (65 bytes) ?"
@@ -78,8 +76,9 @@ To spend Bitcoin that Satoshi sent, Hal must provide a valid signature correspon
 <Signature Hal>
 ```
 
-For our example this is it:: The scriptSig is the signature followed by SigHash byte as shown below
-Click on the transaction below to see it in action:
+The scriptSig is the signature followed by SigHash byte as shown below
+
+Click on **Input 1** of this transaction to see it in action:
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
@@ -102,9 +101,8 @@ When a transaction is validated, the ScriptSig and ScriptPubKey are concatenated
 ```
 
 The combined script will validate if the signature is valid, but fail if the signature is invalid.
-The ScriptSig will only unlock the ScriptPubKey if the signature is valid for that public key.
 
-In other words, only someone with knowledge of the private key can produce a valid ScriptSig.
+The ScriptSig will only unlock the ScriptPubKey if the signature is valid for that public key. In other words, only someone with knowledge of the private key can produce a valid ScriptSig.
 
 > [!NOTE]
 > For the script to be valid, the top element of the stack must be **nonzero** after evaluation
