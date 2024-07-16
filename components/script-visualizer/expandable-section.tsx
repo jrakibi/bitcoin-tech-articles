@@ -29,7 +29,7 @@ export default function ExpandableSection({ title, preview, children }: Expandab
           </div>
         </div>
         {isExpanded && <div className="mt-4">{children}</div>}
-        <button className="text-orange-500 underline focus:outline-none" onClick={handleToggle}>
+        <button className="text-[#635FC7] underline focus:outline-none" onClick={handleToggle}>
           {isExpanded ? 'See Less' : 'See More'}
         </button>
       </div>

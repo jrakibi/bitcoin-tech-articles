@@ -33,22 +33,31 @@ The ability to lock and unlock coins is the mechanism by which we transfer bitco
 
 #### 1- Locking (ScriptPubKey):
 
-When creating a P2PK transaction, Satoshi specifies **Hal's public key in the ScriptPubKey**.  
-This script specifies the conditions that must be met to spend the bitcoins in the future, and it's placed within the output of a transaction.
+When creating a P2PK transaction, Satoshi specifies **Finney's public key in the ScriptPubKey**.
 
-**ScriptPubKey**: A P2PK locking script looks like this:
+<article className="flex flex-row">
+  <div className="w-2/3">
+      This script specifies the conditions that must be met to spend the bitcoins in the future, and it's placed within the output of a transaction.
+
+    **ScriptPubKey**: A P2PK locking script looks like this:
 
 ```
-<Public key Hal> OP_CHECKSIG
+<Public key Finney> OP_CHECKSIG
 ```
 
-To see this in action, click on the **Output 1** of this transaction to view the scriptPubKey that Satoshi created to lock this 10 BTC to Hal's public key.
+  </div>
+  <div className="w-1/3 ml-10">
+    <img src="/static/images/spk.png" alt="P2PK transaction illustration" />
+  </div>
+</article>
+
+To see this in action, click on **Output 1** of the transaction to view the scriptPubKey Satoshi used to lock 10 BTC to Finney's public key.
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
   txId="f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16"
-  txTitle="Satoshi Sends 10 BTC to Hal"
-  highlightIndex={{ output: 1 }}
+  txTitle="Satoshi Sends 10 BTC to Finney"
+  highlightIndex={{ output: 0 }}
 />
 
 - **OP_PUSHBYTES_65**: (41 in Hex) Length of the uncompressed public key (65 bytes)
@@ -67,14 +76,23 @@ their public keys are smaller => smaller transaction on the network => save bloc
 
 #### 2- Unlocking (ScriptSig)
 
-To spend bitcoin that Satoshi sent, Hal must provide a valid signature corresponding to the public key.  
-This signature proves that Hal has the private key corresponding to the public key specified in the ScriptPubKey.
+To spend bitcoin that Satoshi sent, Finney must provide a valid signature corresponding to the public key.
+
+<article className="flex flex-row">
+  <div className="w-2/3">
+    This signature proves that Finney has the private key corresponding to the public key specified in the ScriptPubKey.
 
 **ScriptSig:** A P2PK Unlocking script looks like this:
 
 ```
-<Signature Hal>
+<Signature Finney>
 ```
+
+  </div>
+  <div className="w-1/3 ml-10">
+    <img src="/static/images/scriptSig.png" alt="P2PK transaction illustration" />
+  </div>
+</article>
 
 Click on **Input 1** of this transaction to see this scriptSig created by Hal Finney
 
@@ -94,7 +112,7 @@ Click on **Input 1** of this transaction to see this scriptSig created by Hal Fi
 When a transaction is validated, the ScriptSig and ScriptPubKey are concatenated.
 
 ```
-<signature Hal> <public key Hal> OP_CHECKSIG
+<signature Finney> <public key Finney> OP_CHECKSIG
 ```
 
 The combined script will validate if the signature is valid, but fail if the signature is invalid.

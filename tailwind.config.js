@@ -12,6 +12,7 @@ module.exports = {
     './layouts/**/*.{js,ts,tsx}',
     './data/**/*.mdx',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       lineHeight: {
@@ -25,7 +26,7 @@ module.exports = {
         sriracha: ['var(--font-sriracha)', ...fontFamily.sans],
       },
       colors: {
-        primary: colors.pink,
+        primary: colors.blue,
         gray: colors.gray,
       },
       typography: ({ theme }) => ({
