@@ -8,23 +8,22 @@ summary: 'This article discusses the Pay To Public Key (P2PK) method used in Bit
 layout: PostSimple
 ---
 
-P2PK was one of the earliest transaction types used in Bitcoin. Many of the early Bitcoin transactions attributed to Satoshi used P2PK.
+The first transaction in Bitcoin history was a P2PK transaction from [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16) where _Satoshi Nakamoto_ sent 10 BTC to _Hal Finney_.
 
-This simple script type serves as an ideal foundation for understanding more complex scripts
-
-**TLDR:** P2PK allows bitcoins to be sent directly to a _public key_. To spend the bitcoins, the recipient must provide a _valid signature_.
-
-> [!NOTE]
-> Despite being the simplest script, P2PK is not used as much as P2PKH.
-
-To better understand how P2PK works, let's explore the **first transaction in Bitcoin history** from [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where _Satoshi Nakamoto_ sent 10 BTC to _Hal Finney_.
+We will use this transaction to help us understand how P2PK works in detail. From the creation of the transaction to its validation. (Understanding P2PK will serves as an ideal foundation for understanding more complex scripts)
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
   txTitle="Satoshi Sends 10 BTC to Hal Finney"
   highlightIndex={{ output: 0 }}
 />
-> Note: You can Click on Inputs and Outputs above to view more details
+
+**TLDR:** P2PK allows bitcoins to be sent directly to a _public key_. To spend the bitcoins, the recipient must provide a _valid signature_.
+
+> [!NOTE]
+> Despite being simple, P2PK is not as widely used as P2PKH. We'll cover **why** this is the case later on.
+
+### How does it work ?
 
 The ability to lock and unlock coins is the mechanism by which we transfer bitcoin.  
 **Locking** is giving bitcoins to someone.  
@@ -43,7 +42,7 @@ This script specifies the conditions that must be met to spend the bitcoins in t
 <Public key Hal> OP_CHECKSIG
 ```
 
-To see this in action click on the **Output 1** of this Transaction too see the HEX and ASM representation of scriptPubKey
+To see this in action, click on the **Output 1** of this transaction to view the scriptPubKey that Satoshi created to lock this 10 BTC to Hal's public key.
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
@@ -52,15 +51,15 @@ To see this in action click on the **Output 1** of this Transaction too see the 
   highlightIndex={{ output: 1 }}
 />
 
-- **OP_PUSHBYTES_65**: Indicates the length of the uncompressed public key (65 bytes)
-- **0411db ... b412a3**: Represents Hal Finney's public key
-- **OP_CHECKSIG**: This opcode, shown as "0xac" at the end of the HEX section above, verifies an ECDSA signature. It returns TRUE (OP_1) if the signature is valid, otherwise FALSE (OP_0).
+- **OP_PUSHBYTES_65**: (41 in Hex) Length of the uncompressed public key (65 bytes)
+- **0411db ... b412a3**: Represents Hal Finney's uncompressed public key
+- **OP_CHECKSIG**: (0xac in Hex) Verifies the signature for the provided public key. It returns TRUE (1) if valid, otherwise FALSE (0)
 
 <ExpandableSection
   title="Why Satoshi used Uncompressed pub key (65 bytes) ?"
   preview="Satoshi didn't know about compressed public keys ..."
 >
-Some have speculated that Satoshi was unaware of public key compression. It wasn't until Pieter Wuille discovered that the compressed SEC format existed in OpenSSL that people start using it.   
+Some have [speculated](https://bitcoin.stackexchange.com/a/5960) that Satoshi was unaware of public key compression. It wasn't until Pieter Wuille discovered that the compressed SEC format existed in OpenSSL that people start using it.   
 The advantage of using Compressed pub key is:   
 their public keys are smaller => smaller transaction on the network => save block space
 
@@ -68,29 +67,27 @@ their public keys are smaller => smaller transaction on the network => save bloc
 
 #### 2- Unlocking (ScriptSig)
 
-To spend Bitcoin that Satoshi sent, Hal must provide a valid signature corresponding to the public key.
+To spend bitcoin that Satoshi sent, Hal must provide a valid signature corresponding to the public key.  
+This signature proves that Hal has the private key corresponding to the public key specified in the ScriptPubKey.
 
-**ScriptSig:** P2PK Unlocking script looks like this:
+**ScriptSig:** A P2PK Unlocking script looks like this:
 
 ```
 <Signature Hal>
 ```
 
-The scriptSig is the signature followed by SigHash byte as shown below
-
-Click on **Input 1** of this transaction to see it in action:
+Click on **Input 1** of this transaction to see this scriptSig created by Hal Finney
 
 <TransactionsDisplay
-  rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
-  txId="f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16"
-  txTitle="Satoshi Sends 10 BTC to Hal"
+  rawTx="0100000001169e1e83e930853391bc6f35f605c6754cfead57cf8387639d3b4096c54f18f400000000484730440220576497b7e6f9b553c0aba0d8929432550e092db9c130aae37b84b545e7f4a36c022066cb982ed80608372c139d7bb9af335423d5280350fe3e06bd510e695480914f01ffffffff0100ca9a3b000000001976a914340cfcffe029e6935f4e4e5839a2ff5f29c7a57188ac00000000"
+  txId="ea44e97271691990157559d0bdd9959e02790c34db6c006d779e82fa5aee708e"
+  txTitle="Hal Finney receives his 10 BTC"
   highlightIndex={{ input: 0 }}
 
 />
 
-- **OP_PUSHBYTES_71**: Indicates the length of the signature (71 bytes).
-- **30442 ... 1d9**: Hal's digital signature.
-- **01**: SigHash type (SIGHASH_ALL)
+- **OP_PUSHBYTES_71**: (47 in Hex) Length of the signature (71 bytes).
+- **30442 ... 914f01**: Signature followed by SigHash byte
 
 #### 3- Validation
 
@@ -144,9 +141,11 @@ You can play with this tool below to see step by step how we evaluate P2PK the s
 
 ### Problems with P2PK
 
-- **❌ Public keys are long:** Your username on a website is usually less than 20 characters, but a compressed public key is 33 bytes, and an uncompressed one is 65 bytes. When converted to Hex, the length doubles (compressed: 33 bytes × 2 = 66 characters; uncompressed: 65 bytes × 2 = 130 characters). This is because each byte is represented by two hexadecimal characters (8 bits = 2 × 4 bits)
+- **❌ Public keys are long:** Your username on a website is usually less than 20 characters, but Bitcoin public keys are far larger, posing a practical issue. Uncompressed public keys contain 65 bytes, resulting in 130 hexadecimal characters when converted, and compressed keys have 33 bytes, which doubles to 66 characters in hexadecimal. This is because each byte is represented by two hexadecimal characters (1 byte = 8 bits = 2 × 4 bits)
 - **❌ Larger public keys = larger UTXO:** These keys must be stored and indexed, requiring more resources for full nodes.
 - **❌ If ECDSA is broken**, these outputs could be stolen because everyone can see the public key in the scriptPubKey field.
+
+![P2PK Problems](/static/images/p2pk-problems.png)
 
 ### Solving the Problems with p2pkh
 

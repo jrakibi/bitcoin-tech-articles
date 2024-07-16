@@ -101,7 +101,7 @@ export default function ScriptStackVisualizer({ type, children }: ScriptStackVis
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
+    <div className="flex flex-col items-center justify-center py-3">
       {/* <NavBar></NavBar> */}
 
       <div className="mx-auto flex w-full max-w-6xl space-x-2 rounded-lg bg-gray-100 p-2 shadow-md">

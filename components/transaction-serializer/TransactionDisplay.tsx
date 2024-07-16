@@ -62,7 +62,7 @@ const TransactionsDisplay: React.FC<TransactionsDisplayProps> = ({
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto py-1">
       <div className="mb-6 rounded-lg bg-gray-100 p-3">
         <div className="h-full space-y-4 rounded-lg font-mono text-sm">
           <div className="text-center">
@@ -78,7 +78,7 @@ const TransactionsDisplay: React.FC<TransactionsDisplayProps> = ({
               {decodedTransaction?.inputs?.map((input, index) => (
                 <button
                   key={index}
-                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.input === index ? 'bg-blue-200' : ''}`}
+                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.input === index ? 'bg-yellow-200' : ''}`}
                   onClick={() => handleDetailChange(input)}
                 >
                   <div className="flex items-center justify-between">
@@ -108,7 +108,7 @@ const TransactionsDisplay: React.FC<TransactionsDisplayProps> = ({
               {decodedTransaction?.outputs?.map((output, index) => (
                 <button
                   key={index}
-                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.output === index ? 'bg-blue-200' : ''}`}
+                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.output === index ? 'bg-yellow-200' : ''}`}
                   onClick={() => handleDetailChange(output)}
                 >
                   <div className="flex items-center justify-between">

@@ -16,7 +16,7 @@ export default function ExpandableSection({ title, preview, children }: Expandab
   }
 
   return (
-    <div className="mx-auto mb-4">
+    <div className="mx-auto py-3">
       <div className="rounded-lg border-l-4 border-[#635FC7] bg-[#F7F8FA] p-6">
         <div>
           <h4 className="mb-0 mt-0" style={{ display: 'flex' }}>
