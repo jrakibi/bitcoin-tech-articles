@@ -2,7 +2,7 @@
 const siteMetadata = {
   title: 'Bitcoin Tech',
   author: 'Jamal ERRAKIBI',
-  headerTitle: 'Bitcoin Tech',
+  headerTitle: 'Bitcoin  Topics Review',
   description: 'Explaining bitcoin topics',
   language: 'en-us',
   theme: 'system', // system, dark or light
