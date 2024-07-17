@@ -13,10 +13,7 @@ const BitcoinTransactionViewer: React.FC<{ detail: any }> = ({ detail }) => {
     if (!asm) return []
     const parts = asm.split(' ')
     return parts.map((part, index) => (
-      <div
-        key={index}
-        className={part.startsWith('OP_') ? 'font-bold text-indigo-500' : 'text-black'}
-      >
+      <div key={index} className={part.startsWith('OP_') ? 'font-bold text-sky-500' : 'text-black'}>
         {part}
       </div>
     ))
@@ -81,13 +78,13 @@ const TransactionsDisplay: React.FC<TransactionsDisplayProps> = ({
               {decodedTransaction?.inputs?.map((input, index) => (
                 <button
                   key={index}
-                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.input === index ? 'bg-indigo-200' : ''}`}
+                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.input === index ? 'bg-[#E0F2FE]' : ''}`}
                   onClick={() => handleDetailChange(input)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="font-medium text-gray-800">Input {index + 1}</div>
                     {highlightIndex?.input === index && (
-                      <span className="text-black-800 rounded-full bg-indigo-200 px-3 py-1 text-sm">
+                      <span className="text-black-800 rounded-full bg-[#BAE6FD] px-3 py-1 text-sm">
                         {input.scriptSig.type || 'Type not specified'}
                       </span>
                     )}
@@ -111,13 +108,13 @@ const TransactionsDisplay: React.FC<TransactionsDisplayProps> = ({
               {decodedTransaction?.outputs?.map((output, index) => (
                 <button
                   key={index}
-                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.output === index ? 'bg-blue-200' : ''}`}
+                  className={`mb-2 cursor-pointer rounded-lg bg-white p-2 shadow ${highlightIndex?.output === index ? 'bg-[#E0F2FE]' : ''}`}
                   onClick={() => handleDetailChange(output)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="font-medium text-gray-800">Output {index + 1}</div>
                     {highlightIndex?.output === index && (
-                      <span className="text-black-800 rounded-full bg-indigo-200 px-3 py-1 text-sm">
+                      <span className="text-black-800 rounded-full bg-[#BAE6FD] px-3 py-1 text-sm">
                         {output.scriptPubKey.type || 'Type not specified'}
                       </span>
                     )}

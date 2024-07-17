@@ -26,8 +26,14 @@ module.exports = {
         sriracha: ['var(--font-sriracha)', ...fontFamily.sans],
       },
       colors: {
-        primary: colors.blue,
+        primary: colors.sky,
         gray: colors.gray,
+        bluee: {
+          200: '#bfdbfe',
+          100: '#bfdbfe',
+          300: '#bfdbfe',
+          400: '#bfdbfe',
+        },
       },
       typography: ({ theme }) => ({
         DEFAULT: {

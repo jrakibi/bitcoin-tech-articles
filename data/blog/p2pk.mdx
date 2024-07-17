@@ -8,9 +8,9 @@ summary: 'This article discusses the Pay To Public Key (P2PK) method used in Bit
 layout: PostSimple
 ---
 
-The first transaction in Bitcoin history was a P2PK transaction from [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16) where _Satoshi Nakamoto_ sent 10 BTC to _Hal Finney_.
+The first Bitcoin transaction was a P2PK transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi Nakamoto sent 10 BTC to Hal Finney
 
-We will use this transaction to help us understand how P2PK works in detail. From the creation of the transaction to its validation. (Understanding P2PK will serves as an ideal foundation for understanding more complex scripts)
+We will explore this transaction in detail to understand how P2PK works, from its creation to its validation. (Understanding P2PK serves as an ideal foundation for more complex scripts)
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
@@ -33,7 +33,7 @@ The ability to lock and unlock coins is the mechanism by which we transfer bitco
 
 #### 1- Locking (ScriptPubKey):
 
-When creating a P2PK transaction, Satoshi specifies **Finney's public key in the ScriptPubKey**.
+When creating this P2PK transaction, Satoshi specifies **Finney's public key in the ScriptPubKey**.
 
 <article className="flex flex-row">
   <div className="w-2/3">
@@ -51,7 +51,7 @@ When creating a P2PK transaction, Satoshi specifies **Finney's public key in the
   </div>
 </article>
 
-To see this in action, click on **Output 1** of the transaction to view the scriptPubKey Satoshi used to lock 10 BTC to Finney's public key.
+Click on **Output 1** of the transaction below to view the scriptPubKey that Satoshi used to lock 10 BTC to Finney's public key and see this in action.
 
 <TransactionsDisplay
   rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
@@ -94,7 +94,7 @@ To spend bitcoin that Satoshi sent, Finney must provide a valid signature corres
   </div>
 </article>
 
-Click on **Input 1** of this transaction to see this scriptSig created by Hal Finney
+Click on **Input 1** of this transaction to view the scriptSig created by Hal Finney.
 
 <TransactionsDisplay
   rawTx="0100000001169e1e83e930853391bc6f35f605c6754cfead57cf8387639d3b4096c54f18f400000000484730440220576497b7e6f9b553c0aba0d8929432550e092db9c130aae37b84b545e7f4a36c022066cb982ed80608372c139d7bb9af335423d5280350fe3e06bd510e695480914f01ffffffff0100ca9a3b000000001976a914340cfcffe029e6935f4e4e5839a2ff5f29c7a57188ac00000000"
@@ -109,7 +109,10 @@ Click on **Input 1** of this transaction to see this scriptSig created by Hal Fi
 
 #### 3- Validation
 
-When a transaction is validated, the ScriptSig and ScriptPubKey are concatenated.
+Bitcoin uses **Script**, a stack-based scripting language, to validate transactions.  
+It processes commands from left to right and is intentionally designed to be non-Turing complete, lacking features like loops.
+
+When validating a transaction, the ScriptSig and ScriptPubKey are combined. This concatenated script looks something like this:
 
 ```
 <signature Finney> <public key Finney> OP_CHECKSIG
